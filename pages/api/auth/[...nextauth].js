@@ -35,12 +35,16 @@ const authHandler = NextAuth(authOptions);
 export default async function handler(...params) {
     await authHandler(...params);
 }
-export const isAdminRequest = async (req,res) =>{ //check if admin
-    const session = await getServerSession(req,res,authOptions);
-    if (!(await isAdminEmail(session?.user?.email))){
-
-        res.status(401);
-        res.end();
-        throw 'not an admin';
+export const isAdminRequest = async (req, res) => {
+    try {
+        const session = await getServerSession(req, res, authOptions);
+        if (!(await isAdminEmail(session?.user?.email))) {
+            res.status(401).json({ error: 'Not an admin' });
+            return;
+        }
+        // Continue processing if user is an admin
+    } catch (error) {
+        console.error('isAdminRequest error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
