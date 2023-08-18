@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import {useSession, signIn, signOut} from "next-auth/react"
 import {Logo, Navbar} from "@/components";
 import {useState} from "react";
